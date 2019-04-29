@@ -25,6 +25,12 @@
               <li class="nav-item">
                 <%= link_to("/chatrooms/#{chatroom.id}", class: "nav-link") do %>
                   <%= chatroom.name %>
+                  <!-- The below "if" statement will only create the span element that subscribes to notifications if this isn't the chatroom you're currently in -->
+                  <% if !current_page?("/chatrooms/#{chatroom.id}") %>
+
+                    <!-- This span element will tell our channel JavaScript to subscribe to the notifications channel for this Chatroom -->
+                    <span data-channel-subscribe="notification" data-chatroom-id="<%= chatroom.id %>" class="badge badge-primary"><%= chatroom.chatroom_connections.find_by(user_id: current_user.id).new_message ? 'new' : '' %></span>
+                  <% end %>
                 <% end %>
               </li>
             <% end %>
