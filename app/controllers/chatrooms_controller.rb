@@ -1,7 +1,12 @@
 class ChatroomsController < ApplicationController
   before_action :authenticate_user!
-  
+  before_action :authenticate_chatroom_connection, only: [:show]
+
+  def index
+    @chatrooms = Chatroom.all
+  end
+
   def show
-    @messages = Message.all
+    @chatroom = Chatroom.find(params[:id])
   end
 end

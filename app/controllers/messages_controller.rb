@@ -1,13 +1,13 @@
 class MessagesController < ApplicationController
   before_action :authenticate_user!
+  before_action :authenticate_chatroom_connection, only: [:create]
 
   def create
-    message = Message.new(user_id: current_user.id, content: params[:content])
+    chatroom = Chatroom.find(params[:id])
+    message = Message.new(user_id: current_user.id, content: params[:content], chatroom_id: chatroom.id)
 
     if message.save
-      # The below method will send a "broadcast" to all subscribers of the Chatroom Channel. This broadcast's second argument is a hash, or a series of key-value pairs, detailing what data to send to each subscriber. We send the message as well as the user that made the message.
-
-      ActionCable.server.broadcast("chatroom_channel", {message: message, user: message.user})
+      ActionCable.server.broadcast("chatroom_channel_#{chatroom.id}", {message: message, user: message.user})
 
       respond_to do |format|
         format.json {render json: {status: 204}}

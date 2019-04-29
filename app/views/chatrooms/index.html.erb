@@ -1,0 +1,15 @@
+<h1 class="text-center">All Chatrooms:</h1>
+<div class="row">
+  <% @chatrooms.each do |chatroom| %>
+    <div class="col-sm-6">
+      <div class="chatroom-index">
+        <h3><%= chatroom.name %></h3>
+        <% if current_user.chatrooms.include?(chatroom) %>
+          <%= link_to("View", "/chatrooms/#{chatroom.id}", method: :get, class: "btn btn-secondary") %>      
+        <% else %>
+          <%= link_to("Join", "/chatrooms/#{chatroom.id}/chatroom_connections", method: :post, class: "btn btn-primary") %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>

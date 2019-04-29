@@ -1,17 +1,18 @@
 $(document).ready(function() {
   var $messageSendButton = $('#message-send-btn');
   var $contentField = $('#content');
-  var $messageDiv = $('#message-div');
   var $token = $('meta[name="csrf-token"]').prop("content");
-  
-  $messageDiv.animate({ scrollTop: $messageDiv.prop("scrollHeight")}, 10);
+
+  // Select the Chatroom div and store its ID in a variable so that we can send it inside the AJAX request down below:
+  var chatroom_id = $('.chatroom').data('chatroom-id');
 
   $messageSendButton.on("click", function() {
     event.preventDefault();
     event.stopPropagation();
 
     $.ajax({
-      url: "/messages",
+      // Modify the URL so that it goes to the correct chatroom:
+      url: `/chatrooms/${chatroom_id}/messages`,
       type: "post",
       dataType: "json",
       data: {content: $contentField.val()},
@@ -22,6 +23,6 @@ $(document).ready(function() {
       error: function(response) {
         console.log(response);
       }
-    });
+    })
   });
 });
